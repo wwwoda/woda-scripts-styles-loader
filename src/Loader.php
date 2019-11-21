@@ -1,8 +1,8 @@
 <?php
 
-namespace Theme;
+namespace Woda\WordPress\ScriptsStylesLoader;
 
-final class AssetsLoader {
+final class Loader {
     public static $backendStyles = [
         'admin.css' => []
     ];
