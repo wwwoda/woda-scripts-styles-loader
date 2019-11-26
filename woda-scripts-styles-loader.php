@@ -23,9 +23,21 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // **********************************************************************
 
+namespace Woda\WordPress\ScriptsStylesLoader;
+
 include_once 'vendor/autoload.php';
 
 add_action('init', static function (): void {
     $settings = apply_filters('woda_scripts_styles_loader_settings', []);
-//    Woda\WordPress\ScriptsStylesLoader\Loader::register($settings);
-});
+    Loader::register($settings);
+}, 10);
+
+$githubAccessToken = get_option('woda_admin_option_github_access_token');
+if (!empty($githubAccessToken)) {
+    $pluginUpdateChecker = \Puc_v4_Factory::buildUpdateChecker(
+        'https://github.com/wwwoda/wp-plugin-scripts-styles-loader/',
+        __FILE__,
+        'woda-scripts-styles-loader'
+    );
+    $pluginUpdateChecker->setAuthentication($githubAccessToken);
+}

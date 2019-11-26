@@ -28,10 +28,13 @@
     "issues": "https://github.com/wwwoda/wp-plugin-scripts-styles-loader/issues",
     "source": "https://github.com/wwwoda/wp-plugin-scripts-styles-loader"
   },
-  "require": {},
+  "require": {
+    "ext-json": "*",
+    "yahnis-elsts/plugin-update-checker": "^4.8"
+  },
   "autoload": {
     "psr-4": {
-      "Woda\\WordPress\\ScriptsStylesLoader\\": "src/"
+      "Woda\\WordPress\\ScriptsStylesLoader\\": "includes/"
     }
   }
 }
