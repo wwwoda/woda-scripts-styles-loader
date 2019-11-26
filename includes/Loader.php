@@ -43,6 +43,11 @@ final class Loader
     /** @var string  */
     public static $vendorScriptsUrl;
 
+    /**
+     * Main registration function for plugin
+     *
+     * @param array|null $settings
+     */
     public static function register(?array $settings = []): void
     {
         $defaults = [
@@ -74,6 +79,17 @@ final class Loader
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendScripts']);
     }
 
+    /**
+     * Function to be executed on admin_head action hook
+     */
+    public static function enqueueBackendScripts(): void
+    {
+        self::registerStyles(self::$backendStyles);
+    }
+
+    /**
+     * Function to be executed on wp_enqueue_scripts action hook
+     */
     public static function enqueueFrontendScripts(): void
     {
         self::registerScripts(self::$scripts);
@@ -81,11 +97,11 @@ final class Loader
         self::updateJQueryVersion();
     }
 
-    public static function enqueueBackendScripts(): void
-    {
-        self::registerStyles(self::$backendStyles);
-    }
-
+    /**
+     * Enqueue a list of JS files
+     *
+     * @param array $scripts
+     */
     private static function registerScripts(array $scripts = []): void
     {
         if (empty(self::$scriptsUrl) || empty(self::$scriptsDir)) {
@@ -111,6 +127,11 @@ final class Loader
         }
     }
 
+    /**
+     * Enqueue a list of CSS files
+     *
+     * @param array $styles
+     */
     private static function registerStyles(array $styles = []): void
     {
         if (empty(self::$stylesUrl) || empty(self::$stylesDir)) {
@@ -136,6 +157,9 @@ final class Loader
         }
     }
 
+    /**
+     * Replace version 1 of jQuery registered by default by WordPress with the latest version
+     */
     private static function updateJQueryVersion(): void
     {
         if (empty(self::$vendorScriptsUrl) || empty(self::$vendorScriptsDir)) {
@@ -155,21 +179,42 @@ final class Loader
         );
     }
 
+    /**
+     * Removes extension from file name
+     *
+     * @param string $filename
+     * @return string
+     */
     private static function getFilenamewithoutExtension(string $filename): string
     {
         return pathinfo($filename, PATHINFO_FILENAME);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     private static function getScriptHash(string $filename): string
     {
         return self::getAssetVersion(self::$scriptsHashesPath, $filename);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     private static function getStyleHash(string $filename): string
     {
         return self::getAssetVersion(self::$stylesHashesPath, $filename);
     }
 
+    /**
+     * Retrieves a file's hash value from a JSON file
+     *
+     * @param string $hashesPath    Path to JSON file
+     * @param string $filename
+     * @return string
+     */
     private static function getAssetVersion(string $hashesPath, string $filename): string
     {
         if (!file_exists($hashesPath)) {
