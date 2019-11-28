@@ -7,7 +7,7 @@
  * Author URI:      https://www.woda.at
  * Text Domain:     woda-scripts-styles-loader
  * Domain Path:     /languages
- * Version:         0.1.1
+ * Version:         0.1.2
  *
  * @package         Woda_Scripts_Styles_Loader
  */
