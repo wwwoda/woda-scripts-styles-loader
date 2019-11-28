@@ -105,14 +105,14 @@ final class Loader
     private static function registerScripts(array $scripts = []): void
     {
         if (empty(self::$scriptsUrl) || empty(self::$scriptsDir)) {
-            trigger_error('$scriptsUrl and/or $scriptsDir settings missing', E_USER_NOTICE);
+            self::triggerError('$scriptsUrl and/or $scriptsDir settings missing');
             return;
         }
         foreach ($scripts as $filename => $script) {
             $src = self::$scriptsUrl . '/' . $filename;
             $path = self::$scriptsDir . '/' . $filename;
             if (!file_exists($path)) {
-                trigger_error('Script can\'t be registered because it doesn\'t exist: ' . $path, E_USER_NOTICE);
+                self::triggerError('Script can\'t be registered because it doesn\'t exist: ' . $path);
                 return;
             }
             $ver = self::getScriptHash($filename);
@@ -135,14 +135,14 @@ final class Loader
     private static function registerStyles(array $styles = []): void
     {
         if (empty(self::$stylesUrl) || empty(self::$stylesDir)) {
-            trigger_error('$stylesUrl and/or $stylesDir settings missing', E_USER_NOTICE);
+            self::triggerError('$stylesUrl and/or $stylesDir settings missing');
             return;
         }
         foreach ($styles as $filename => $style) {
             $src = self::$stylesUrl . '/' . $filename;
             $path = self::$stylesDir . '/' . $filename;
             if (!file_exists($path)) {
-                trigger_error('Style can\'t be registered because it doesn\'t exist: ' . $path, E_USER_NOTICE);
+                self::triggerError('Style can\'t be registered because it doesn\'t exist: ' . $path);
                 return;
             }
             $ver = self::getStyleHash($filename);
@@ -163,13 +163,13 @@ final class Loader
     private static function updateJQueryVersion(): void
     {
         if (empty(self::$vendorScriptsUrl) || empty(self::$vendorScriptsDir)) {
-            trigger_error('$vendorScriptsUrl and/or $vendorScriptsDir settings missing', E_USER_NOTICE);
+            self::triggerError('$vendorScriptsUrl and/or $vendorScriptsDir settings missing');
             return;
         }
         $src = self::$vendorScriptsUrl . '/' . self::$jqueryFilename;
         $path = self::$vendorScriptsDir . '/' . self::$jqueryFilename;
         if (!file_exists($path)) {
-            trigger_error('jQuery file doesn\'t exist: ' . $path, E_USER_NOTICE);
+            self::triggerError('jQuery file doesn\'t exist: ' . $path);
             return;
         }
         wp_deregister_script('jquery');
@@ -218,14 +218,29 @@ final class Loader
     private static function getAssetVersion(string $hashesPath, string $filename): string
     {
         if (!file_exists($hashesPath)) {
-            trigger_error('Hash JSON file doesn\'t exist: ' . $hashesPath, E_USER_NOTICE);
+            self::triggerError('Hash JSON file doesn\'t exist: ' . $hashesPath);
             return '';
         }
         $hashes = json_decode(file_get_contents($hashesPath), true);
         if (!isset($hashes[$filename])) {
-            trigger_error('"' . $filename . '" key isn\'t set in: ' . $hashesPath, E_USER_NOTICE);
+            self::triggerError('"' . $filename . '" key isn\'t set in: ' . $hashesPath);
             return '';
         }
         return $hashes[$filename] ?? '';
+    }
+
+    /**
+     * Trigger errors only if Query Monitor is activated
+     *
+     * @param $msg
+     * @param int $errorType
+     */
+    private static function triggerError($msg, $errorType = E_USER_NOTICE): void
+    {
+        if (class_exists('QM_Activation') === false) {
+            return;
+        }
+
+        trigger_error($msg, $errorType);
     }
 }
