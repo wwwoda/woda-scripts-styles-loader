@@ -32,12 +32,13 @@ add_action('init', static function (): void {
     Loader::register($settings);
 }, 10);
 
+$pluginUpdateChecker = \Puc_v4_Factory::buildUpdateChecker(
+    'https://github.com/wwwoda/wp-plugin-scripts-styles-loader/',
+    __FILE__,
+    'woda-scripts-styles-loader'
+);
+
 $githubAccessToken  = defined( 'GITHUB_ACCESS_TOKEN' ) ? GITHUB_ACCESS_TOKEN : get_option('woda_github_access_token');
 if (!empty($githubAccessToken)) {
-    $pluginUpdateChecker = \Puc_v4_Factory::buildUpdateChecker(
-        'https://github.com/wwwoda/wp-plugin-scripts-styles-loader/',
-        __FILE__,
-        'woda-scripts-styles-loader'
-    );
     $pluginUpdateChecker->setAuthentication($githubAccessToken);
 }
