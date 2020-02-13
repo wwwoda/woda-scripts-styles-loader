@@ -12,6 +12,10 @@ final class Loader
     public static $hashesJSONFilename = '.assets.json';
     /** @var string  */
     public static $jqueryFilename = 'jquery.min.js';
+    /** @var int  */
+    public static $priorityEnqueueFrontendScripts = 10;
+    /** @var int  */
+    public static $priorityEnqueueFrontendStyles = 999999;
     /** @var array  */
     public static $scripts = [
         'main.js' => [
@@ -63,6 +67,8 @@ final class Loader
             $settings['backendStyles'] ?? []
         );
         self::$jqueryFilename = $settings['jqueryFilename'] ?? self::$jqueryFilename;
+        self::$priorityEnqueueFrontendScripts = $settings['priorityEnqueueFrontendScripts'] ?? self::$priorityEnqueueFrontendScripts;
+        self::$priorityEnqueueFrontendStyles = $settings['priorityEnqueueFrontendStyles'] ?? self::$priorityEnqueueFrontendStyles;
         self::$scripts = array_merge(self::$scripts, $settings['scripts'] ?? []);
         self::$scriptsDir = $settings['scriptsDir'] ?? $defaults['scriptsDir'];
         self::$scriptsHashesPath = $settings['scriptsHashesPath'] ?? self::$scriptsDir . '/' . self::$hashesJSONFilename;
@@ -77,6 +83,8 @@ final class Loader
         self::$vendorScriptsUrl = $settings['vendorScriptsUrl'] ?? $defaults['vendorScriptsUrl'];
         add_action('admin_head', [self::class, 'enqueueBackendScripts']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendScripts']);
+        add_action('wp_enqueue_scripts', [self::class, 'updateJQueryVersion']);
+        add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendStyles']);
     }
 
     /**
@@ -85,6 +93,7 @@ final class Loader
     public static function enqueueBackendScripts(): void
     {
         self::registerStyles(self::$backendStyles);
+        self::updateJQueryVersion();
     }
 
     /**
@@ -93,8 +102,39 @@ final class Loader
     public static function enqueueFrontendScripts(): void
     {
         self::registerScripts(self::$scripts);
+    }
+
+    /**
+     * Function to be executed on wp_enqueue_scripts action hook
+     */
+    public static function enqueueFrontendStyles(): void
+    {
         self::registerStyles(self::$styles);
-        self::updateJQueryVersion();
+    }
+
+    /**
+     * Replace version 1 of jQuery registered by default by WordPress with the latest version
+     */
+    public static function updateJQueryVersion(): void
+    {
+        if (is_admin()) {
+            return;
+        }
+        if (empty(self::$vendorScriptsUrl) || empty(self::$vendorScriptsDir)) {
+            self::triggerError('$vendorScriptsUrl and/or $vendorScriptsDir settings missing');
+            return;
+        }
+        $src = self::$vendorScriptsUrl . '/' . self::$jqueryFilename;
+        $path = self::$vendorScriptsDir . '/' . self::$jqueryFilename;
+        if (!file_exists($path)) {
+            self::triggerError('jQuery file doesn\'t exist: ' . $path);
+            return;
+        }
+        wp_deregister_script('jquery');
+        wp_enqueue_script(
+            'jquery',
+            $src
+        );
     }
 
     /**
@@ -155,28 +195,6 @@ final class Loader
                 $style['media'] ?? 'all'
             );
         }
-    }
-
-    /**
-     * Replace version 1 of jQuery registered by default by WordPress with the latest version
-     */
-    private static function updateJQueryVersion(): void
-    {
-        if (empty(self::$vendorScriptsUrl) || empty(self::$vendorScriptsDir)) {
-            self::triggerError('$vendorScriptsUrl and/or $vendorScriptsDir settings missing');
-            return;
-        }
-        $src = self::$vendorScriptsUrl . '/' . self::$jqueryFilename;
-        $path = self::$vendorScriptsDir . '/' . self::$jqueryFilename;
-        if (!file_exists($path)) {
-            self::triggerError('jQuery file doesn\'t exist: ' . $path);
-            return;
-        }
-        wp_deregister_script('jquery');
-        wp_enqueue_script(
-            'jquery',
-            $src
-        );
     }
 
     /**

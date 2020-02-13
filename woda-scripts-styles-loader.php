@@ -7,7 +7,7 @@
  * Author URI:      https://www.woda.at
  * Text Domain:     woda-scripts-styles-loader
  * Domain Path:     /languages
- * Version:         0.1.2
+ * Version:         0.2.0
  *
  * @package         Woda_Scripts_Styles_Loader
  */
@@ -32,7 +32,7 @@ add_action('init', static function (): void {
     Loader::register($settings);
 }, 10);
 
-$githubAccessToken = get_option('woda_admin_option_github_access_token');
+$githubAccessToken  = defined( 'GITHUB_ACCESS_TOKEN' ) ? GITHUB_ACCESS_TOKEN : get_option('woda_github_access_token');
 if (!empty($githubAccessToken)) {
     $pluginUpdateChecker = \Puc_v4_Factory::buildUpdateChecker(
         'https://github.com/wwwoda/wp-plugin-scripts-styles-loader/',

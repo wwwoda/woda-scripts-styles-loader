@@ -30,7 +30,7 @@
   },
   "require": {
     "ext-json": "*",
-    "yahnis-elsts/plugin-update-checker": "^4.8"
+    "yahnis-elsts/plugin-update-checker": "^4.9"
   },
   "autoload": {
     "psr-4": {
