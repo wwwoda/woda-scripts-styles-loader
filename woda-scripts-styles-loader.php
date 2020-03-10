@@ -1,16 +1,17 @@
 <?php
 /**
  * Plugin Name:       Woda Scripts Styles Loader
- * Plugin URI:        https://github.com/wwwoda/wp-plugin-scripts-styles-loader
+ * Plugin URI:        https://github.com/wwwoda/woda-scripts-styles-loader
  * Description:       ...
- * Version:           0.3.0
+ * Version:           0.3.1
  * Author:            Woda
  * Author URI:        https://www.woda.at
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:       /languages
  * Text Domain:       woda-scripts-styles-loader
- * GitHub Plugin URI: https://github.com/wwwoda/wp-plugin-scripts-styles-loader
+ * GitHub Plugin URI: https://github.com/wwwoda/woda-scripts-styles-loader
+ * Release Asset:     true
  *
  * @package           Woda_Scripts_Styles_Loader
  */

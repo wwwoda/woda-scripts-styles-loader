@@ -1,5 +1,5 @@
 {
-  "name": "woda/wp-scripts-styles-loader",
+  "name": "woda/scripts-styles-loader",
   "description": "",
   "keywords": [
     "wordpress",
@@ -7,7 +7,7 @@
     "assets"
   ],
   "license": "GPLv2 or later",
-  "homepage": "https://github.com/wwwoda/wp-plugin-scripts-styles-loader",
+  "homepage": "https://github.com/wwwoda/woda-scripts-styles-loader",
   "authors": [
     {
       "name": "Woda",
@@ -25,8 +25,8 @@
   ],
   "type": "wordpress-plugin",
   "support": {
-    "issues": "https://github.com/wwwoda/wp-plugin-scripts-styles-loader/issues",
-    "source": "https://github.com/wwwoda/wp-plugin-scripts-styles-loader"
+    "issues": "https://github.com/wwwoda/woda-scripts-styles-loader/issues",
+    "source": "https://github.com/wwwoda/woda-scripts-styles-loader"
   },
   "require": {
     "ext-json": "*",
