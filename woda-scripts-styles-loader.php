@@ -3,7 +3,7 @@
  * Plugin Name:       Woda Scripts Styles Loader
  * Plugin URI:        https://github.com/wwwoda/woda-scripts-styles-loader
  * Description:       ...
- * Version:           0.3.1
+ * Version:           0.4.0
  * Author:            Woda
  * Author URI:        https://www.woda.at
  * License:           GNU General Public License v2

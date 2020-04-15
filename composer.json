@@ -29,8 +29,7 @@
     "source": "https://github.com/wwwoda/woda-scripts-styles-loader"
   },
   "require": {
-    "ext-json": "*",
-    "yahnis-elsts/plugin-update-checker": "^4.9"
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {

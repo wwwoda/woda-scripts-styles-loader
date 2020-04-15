@@ -83,7 +83,7 @@ final class Loader
         self::$vendorScriptsUrl = $settings['vendorScriptsUrl'] ?? $defaults['vendorScriptsUrl'];
         add_action('admin_head', [self::class, 'enqueueBackendScripts']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendScripts']);
-        add_action('wp_enqueue_scripts', [self::class, 'updateJQueryVersion']);
+        add_action('wp_enqueue_scripts', [self::class, 'maybeUpdateJQueryVersion']);
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendStyles']);
     }
 
@@ -93,7 +93,7 @@ final class Loader
     public static function enqueueBackendScripts(): void
     {
         self::registerStyles(self::$backendStyles);
-        self::updateJQueryVersion();
+        self::maybeUpdateJQueryVersion();
     }
 
     /**
@@ -115,9 +115,13 @@ final class Loader
     /**
      * Replace version 1 of jQuery registered by default by WordPress with the latest version
      */
-    public static function updateJQueryVersion(): void
+    public static function maybeUpdateJQueryVersion(): void
     {
         if (is_admin()) {
+            return;
+        }
+        $isUpdateNeeded = apply_filters('woda-update-jquery', false);
+        if ($isUpdateNeeded !== true) {
             return;
         }
         if (empty(self::$vendorScriptsUrl) || empty(self::$vendorScriptsDir)) {
