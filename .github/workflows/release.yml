@@ -22,13 +22,23 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           filename: '${{ steps.get_repo_name.outputs.REPOSITORY_NAME }}.zip'
-          exclusions: '*.git*
-            /*node_modules/*
-            *.lock
+          exclusions: '.distignore
+            .DS_Store
             .editorconfig
-            .distignore
-            src
-            assets/src'
+            .editorconfig
+            .idea
+            .npmrc
+            .stylelintrc.json
+            *.git*
+            *.lock
+            *.log
+            /*node_modules/*
+            assets/src
+            gulpfile.ts
+            gulppress*
+            npm-debug.log
+            phpcs.xml
+            src'
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
