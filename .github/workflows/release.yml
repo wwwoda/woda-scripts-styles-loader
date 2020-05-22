@@ -22,23 +22,46 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           filename: '${{ steps.get_repo_name.outputs.REPOSITORY_NAME }}.zip'
-          exclusions: '.distignore
+          exclusions: '.babelrc
+            .circleci/config.yml
+            .deployignore
+            .distignore
             .DS_Store
             .editorconfig
-            .editorconfig
+            .eslint*
             .idea
-            .npmrc
-            .stylelintrc.json
+            .phpcs.xml
+            .phpcs.xml.dist
+            .travis.yml
+            .vscode
             *.git*
             *.lock
             *.log
-            /*node_modules/*
-            assets/src
-            gulpfile.ts
-            gulppress*
-            npm-debug.log
-            phpcs.xml
-            src'
+            *.sql
+            *.tar.gz
+            *.zip
+            behat.yml
+            bin
+            bitbucket-pipelines.yml
+            circle.yml
+            composer*
+            dependencies.yml
+            Gruntfile.js
+            gulp*
+            multisite.*
+            node_modules
+            package*
+            phpcs*
+            phpunit*
+            README.md
+            src
+            stylelint*
+            tests
+            Thumbs.db
+            tsconfig.json
+            vendor
+            webpack.config.js
+            wp-cli.local.yml'
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')

@@ -1,12 +1,12 @@
 {
-  "name": "woda/scripts-styles-loader",
+  "name": "woda/wp-scripts-styles-loader",
   "description": "",
   "keywords": [
     "wordpress",
     "plugin",
     "assets"
   ],
-  "license": "GPLv2 or later",
+  "license": "GPLv3",
   "homepage": "https://github.com/wwwoda/woda-scripts-styles-loader",
   "authors": [
     {
@@ -29,6 +29,7 @@
     "source": "https://github.com/wwwoda/woda-scripts-styles-loader"
   },
   "require": {
+    "php": ">=7.2.0",
     "ext-json": "*"
   },
   "autoload": {
