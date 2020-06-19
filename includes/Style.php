@@ -2,11 +2,7 @@
 
 namespace Woda\WordPress\ScriptsStylesLoader;
 
-use Woda\WordPress\ScriptsStylesLoader\Core\Dependency;
-use Woda\WordPress\ScriptsStylesLoader\Core\HashHelper;
-use Woda\WordPress\ScriptsStylesLoader\Utils\File;
-
-final class Style extends Dependency
+final class Style extends Asset
 {
     /**
      * @var string
@@ -15,37 +11,56 @@ final class Style extends Dependency
 
     /**
      * Style constructor.
-     * @param string $src
-     * @param array $deps
-     * @param string $handle
-     * @param string $ver
-     * @param string $media
+     * @param string           $src    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.
+     * @param string[]         $deps   Optional. An array of registered stylesheet handles this stylesheet depends on. Default empty array.
+     * @param string           $handle Optional. Name of the stylesheet. Should be unique.
+     *                                 If empty, handle will be generated from prefix and file name.
+     * @param string|bool|null $ver    Optional. String specifying stylesheet version number, if it has one, which is added to the URL
+     *                                 as a query string for cache busting purposes. If version is set to false, a version
+     *                                 number is automatically added equal to current installed WordPress version.
+     *                                 If set to null, no version is added.
+     * @param string           $media  Optional. The media for which this stylesheet has been defined.
+     *                                 Default 'all'. Accepts media types like 'all', 'print' and 'screen', or media queries like
+     *                                 '(orientation: portrait)' and '(max-width: 640px)'.
      */
-    public function __construct(
-        string $src,
-        array $deps = [],
-        string $handle = '',
-        string $ver = '',
-        string $media = 'all'
-    )
+    public function __construct(string $src, array $deps = [], string $handle = '', $ver = false, string $media = 'all')
     {
         parent::__construct($src, $deps, $handle, $ver);
         $this->media = $media;
     }
 
-    /**
-     * @return string
-     */
-    public function getVersion(): string
+    public function enqueue(int $priority = 10): Style
     {
-        return $this->ver ?: HashHelper::getStyleHashValue(File::getBasename($this->src));
+        add_action('wp_enqueue_scripts', [$this, 'enqueueStyle'], $priority);
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMedia(): string
+    public function enqueueAdmin(int $priority = 10): Style
     {
-        return $this->media;
+        add_action('admin_enqueue_scripts', [$this, 'enqueueStyle'], $priority);
+        return $this;
+    }
+
+    public function enqueueEditor(int $priority = 10): Style
+    {
+        add_action('after_setup_theme', [$this, 'addEditorStyle'], $priority);
+        return $this;
+    }
+
+    public function addEditorStyle(): void
+    {
+        add_theme_support( 'editor-styles' );
+        add_editor_style($this->src);
+    }
+
+    public function enqueueStyle(): void
+    {
+        wp_enqueue_style(
+            $this->handle,
+            $this->src,
+            $this->deps,
+            $this->getVersion(),
+            $this->media
+        );
     }
 }

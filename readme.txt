@@ -3,7 +3,7 @@ Contributors: @davidmondok
 Tags: fonts, performance
 Requires at least: 4.5
 Tested up to: 5.3
-Stable tag: 0.4.0
+Stable tag: 1.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,5 +36,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 = 0.4.0 =
 * jQuery is not updated by default any more. Enable via `add_filter( 'woda-update-jquery', '__return_true' ); `
+
+= 1.0.0 =
+* Complete rewrite of plugin
 
 `<?php code(); // goes in backticks ?>`

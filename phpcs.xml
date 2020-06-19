@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+         name="ScriptsStylesLoader coding standard">
+<rule ref="EventjetStrict"/>
+<file>includes</file>
+<file>test</file>
+<exclude-pattern>test/wp-mock.php</exclude-pattern>
+</ruleset>

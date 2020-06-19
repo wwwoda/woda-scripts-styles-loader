@@ -3,7 +3,7 @@
  * Plugin Name:       Woda Scripts Styles Loader
  * Plugin URI:        https://github.com/wwwoda/woda-scripts-styles-loader
  * Description:       ...
- * Version:           0.4.0
+ * Version:           1.0.0
  * Author:            Woda
  * Author URI:        https://www.woda.at
  * License:           GPLv3
@@ -29,6 +29,6 @@
 
 namespace Woda\WordPress\ScriptsStylesLoader;
 
-include_once 'vendor/autoload.php';
-
-Init::init();
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    include_once 'vendor/autoload.php';
+}
