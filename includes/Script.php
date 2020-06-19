@@ -22,46 +22,126 @@ final class Script extends Asset
      * @param string           $inFooter  Optional. Whether to enqueue the script before </body> instead of in the <head>.
      *                                    Default 'false'.
      */
-    public function __construct(string $src, ?array $deps = [], ?string $handle = '', $ver = false, bool $inFooter = false)
+    public function __construct(string $src, ?array $deps = null, ?string $handle = null, $ver = false, bool $inFooter = false)
     {
         parent::__construct($src, $deps, $handle, $ver);
         $this->inFooter = $inFooter;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function deregister(int $priority = 10): Script
     {
         add_action('wp_enqueue_scripts', [$this, 'deregisterScript'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function deregisterAdmin(int $priority = 10): Script
     {
         add_action('admin_enqueue_scripts', [$this, 'deregisterScript'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function enqueue(int $priority = 10): Script
     {
         add_action('wp_enqueue_scripts', [$this, 'enqueueScript'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function enqueueAdmin(int $priority = 10): Script
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueueScript'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this|Asset
+     */
+    public function loadAsync(int $priority = 10): Asset
+    {
+        add_action('script_loader_tag', [$this, 'addAsyncAttribute'], $priority, 2);
+        return $this;
+    }
+
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this|Asset
+     */
+    public function loadDeferred(int $priority = 10): Asset
+    {
+        add_action('script_loader_tag', [$this, 'addDeferAttribute'], $priority, 2);
+        return $this;
+    }
+
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function register(int $priority = 10): Script
     {
         add_action('wp_enqueue_scripts', [$this, 'registerScript'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function registerAdmin(int $priority = 10): Script
     {
         add_action('admin_enqueue_scripts', [$this, 'registerScript'], $priority);
         return $this;
+    }
+
+    /**
+     * @param string $tag    The <script> tag for the enqueued script.
+     * @param string $handle The script's registered handle.
+     *
+     * @return string
+     */
+    public function addAsyncAttribute(string $tag, string $handle): string
+    {
+        if ($handle === $this->handle) {
+            return str_replace(' src', ' async="async" src', $tag);
+        }
+        return $tag;
+    }
+
+    /**
+     * @param string $tag    The <script> tag for the enqueued script.
+     * @param string $handle The script's registered handle.
+     *
+     * @return string
+     */
+    public function addDeferAttribute(string $tag, string $handle): string
+    {
+        if ($handle === $this->handle) {
+            return str_replace(' src', ' defer="defer" src', $tag);
+        }
+        return $tag;
     }
 
     public function deregisterScript(): void

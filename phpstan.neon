@@ -10,9 +10,3 @@ parameters:
     - test/
   excludes_analyse:
     - test/wp-mock.php
-  ignoreErrors:
-    # Carbon Fields
-    - '#^Access to property \$(hide|add|populate) on an unknown class PostTypes\\PostTypes\\Columns\.$#'
-    - '#^Call to method (hide|add|populate)\(\) on an unknown class PostTypes\\PostTypes\\Columns\.$#'
-    - '#^Call to an undefined method Carbon_Fields\\#'
-    - '#carbon_(get|set)_post_meta not found\.$#'

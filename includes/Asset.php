@@ -40,12 +40,12 @@ abstract class Asset
      *                                 number is automatically added equal to current installed WordPress version.
      *                                 If set to null, no version is added.
      */
-    public function __construct(string $src, ?array $deps = [], ?string $handle = '', $ver = false)
+    public function __construct(string $src, ?array $deps = null, ?string $handle = null, $ver = false)
     {
         $this->file = new File($src);
         $this->src = $src;
-        $this->deps = $deps ?: [];
-        $this->handle = $this->generateHandle($handle);
+        $this->deps = $deps ?? [];
+        $this->handle = $this->generateHandle($handle ?? '');
         $this->ver = $ver;
     }
 
@@ -54,9 +54,9 @@ abstract class Asset
      * @param string   $key      Optional. Lookup key of hash value.
      * @return $this
      */
-    public function addHashFile(HashFile $hashFile, string $key = ''): Asset
+    public function addHashFile(HashFile $hashFile, ?string $key = null): Asset
     {
-        $this->hash = $hashFile->getHashValue($key ?: $this->file->getBaseName());;
+        $this->hash = $hashFile->getHashValue($key ?? $this->file->getBaseName());;
         return $this;
     }
 

@@ -23,24 +23,39 @@ final class Style extends Asset
      *                                 Default 'all'. Accepts media types like 'all', 'print' and 'screen', or media queries like
      *                                 '(orientation: portrait)' and '(max-width: 640px)'.
      */
-    public function __construct(string $src, array $deps = [], string $handle = '', $ver = false, string $media = 'all')
+    public function __construct(string $src, ?array $deps = null, ?string $handle = null, $ver = false, string $media = 'all')
     {
         parent::__construct($src, $deps, $handle, $ver);
         $this->media = $media;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function enqueue(int $priority = 10): Style
     {
         add_action('wp_enqueue_scripts', [$this, 'enqueueStyle'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function enqueueAdmin(int $priority = 10): Style
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueueStyle'], $priority);
         return $this;
     }
 
+    /**
+     * @param int $priority Optional. Execution priority of action hook. Default 10.
+     *
+     * @return $this
+     */
     public function enqueueEditor(int $priority = 10): Style
     {
         add_action('after_setup_theme', [$this, 'addEditorStyle'], $priority);
