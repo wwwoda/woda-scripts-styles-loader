@@ -5,5 +5,4 @@
 <rule ref="EventjetStrict"/>
 <file>includes</file>
 <file>test</file>
-<exclude-pattern>test/wp-mock.php</exclude-pattern>
 </ruleset>

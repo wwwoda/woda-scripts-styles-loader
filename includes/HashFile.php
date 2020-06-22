@@ -1,28 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Woda\WordPress\ScriptsStylesLoader;
 
 final class HashFile
 {
-    /**
-     * @var array
-     */
+    /** @var array<string, string> */
     private $values;
 
-    /**
-     * HashFile constructor.
-     * @param string $path
-     */
     public function __construct(string $path)
     {
-        $this->values = json_decode(file_get_contents($path), true);
+        $content = file_get_contents($path);
+        $this->values = $content ? json_decode($content, true) : [];
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
-    public function getHashValue($name): string
+    public function getHashValue(string $name): string
     {
         return $this->values[$name] ?? '';
     }

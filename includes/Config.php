@@ -9,11 +9,11 @@ use RuntimeException;
 final class Config
 {
     /** @var array<string, mixed> */
-    private static $config;
+    public static $config = [];
 
     public static function loadConfigString(string $key): string
     {
-        if (!isset(self::$config)) {
+        if (empty(self::$config)) {
             self::$config = include __DIR__ . '/../config/plugin.config.php';
         }
         $value = self::$config[$key] ?? null;

@@ -1,4 +1,5 @@
 {
-  "main.js": "1d9123db4a4e7d861577",
-  "app.js": "6790f0f02a5fc7bd9d80"
+  "asset.js": "asset-hash",
+  "script.js": "script-hash",
+  "style.css": "style-hash"
 }

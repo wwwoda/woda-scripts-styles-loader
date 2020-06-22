@@ -1,44 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Woda\WordPress\ScriptsStylesLoader;
 
 abstract class Asset
 {
-    /**
-     * @var array
-     */
-    public $deps = [];
-    /**
-     * @var File
-     */
+    /** @var string[] */
+    public $deps;
+    /** @var File */
     public $file;
-    /**
-     * @var string
-     */
+    /** @var string */
     public $handle;
-    /**
-     * @var string
-     */
+    /** @var string */
     public $hash;
-    /**
-     * @var int
-     */
+    /** @var string */
     public $src;
-    /**
-     * @var string
-     */
+    /** @var string|bool|null */
     public $ver;
 
     /**
-     * Asset constructor.
-     * @param string           $src    Full URL of the script, or path of the asset relative to the WordPress root directory.
-     * @param string[]         $deps   Optional. An array of registered asset handles this asset depends on. Default empty array.
+     *
+     * @param string           $src    Full URL of the script, or path of the asset relative to the WordPress root
+     *                                 directory.
+     * @param string[]         $deps   Optional. An array of registered asset handles this asset depends on. Default
+     *                                 empty array.
      * @param string           $handle Optional. Name of the asset. Should be unique.
      *                                 If empty, handle will be generated from prefix and file name.
-     * @param string|bool|null $ver    Optional. String specifying asset version number, if it has one, which is added to the URL
-     *                                 as a query string for cache busting purposes. If version is set to false, a version
-     *                                 number is automatically added equal to current installed WordPress version.
-     *                                 If set to null, no version is added.
+     * @param string|bool|null $ver    Optional. String specifying asset version number, if it has one, which is added
+     *                                 to the URL as a query string for cache busting purposes. If version is set to
+     *                                 false, a version number is automatically added equal to current installed
+     *                                 WordPress version. If set to null, no version is added.
      */
     public function __construct(string $src, ?array $deps = null, ?string $handle = null, $ver = false)
     {
@@ -49,14 +41,10 @@ abstract class Asset
         $this->ver = $ver;
     }
 
-    /**
-     * @param HashFile $hashFile
-     * @param string   $key      Optional. Lookup key of hash value.
-     * @return $this
-     */
     public function addHashFile(HashFile $hashFile, ?string $key = null): Asset
     {
-        $this->hash = $hashFile->getHashValue($key ?? $this->file->getBaseName());;
+        $this->hash = $hashFile->getHashValue($key ?? $this->file->getBaseName());
+        ;
         return $this;
     }
 
@@ -66,9 +54,6 @@ abstract class Asset
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): string
     {
         if (!empty($this->hash)) {
@@ -83,10 +68,6 @@ abstract class Asset
         return '';
     }
 
-    /**
-     * @param string $handle
-     * @return string
-     */
     private function generateHandle(?string $handle): string
     {
         if (!empty($handle)) {

@@ -8,5 +8,3 @@ parameters:
   paths:
     - includes/
     - test/
-  excludes_analyse:
-    - test/wp-mock.php
