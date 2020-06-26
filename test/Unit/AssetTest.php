@@ -31,31 +31,59 @@ final class AssetTest extends AbstractTestCase
     public function testAddHashFile(): void
     {
         $this->asset->addHashFile($this->hashFile);
+
         self::assertSame('asset-hash', $this->asset->hash);
     }
 
-    public function testGetVersion(): void
+    public function testGetVersionReturnsWordPressVersionWhenPassedFalse(): void
     {
         WpMockHelper::expectCall('get_bloginfo', ['version'], '5.4.0');
+
         self::assertSame('5.4.0', $this->asset->getVersion());
+    }
+
+    public function testGetVersionReturnsEmptyStringWhenPassedNull(): void
+    {
         $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE, null]);
+
         self::assertSame('', $asset->getVersion());
+
+    }
+
+    public function testGetVersionReturnsArgumentWhenPassedString(): void
+    {
         $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE, 'ver']);
+
         self::assertSame('ver', $asset->getVersion());
+    }
+
+    public function testGetVersionReturnsHashValueWhenPassedHashFile(): void
+    {
+        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE]);
         $asset->addHashFile($this->hashFile);
+
         self::assertSame('asset-hash', $asset->getVersion());
     }
 
-    public function testAssetHasExpectedHandle(): void
+    public function testAssetHasExpectedHandleWhenNoCustomHandlePassed(): void
     {
         self::assertSame(self::HANDLE_PREFIX . 'asset', $this->asset->handle);
+    }
 
+    public function testAssetHasExpectedHandleWhenCustomHandlePassed(): void
+    {
+        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], 'custom-handle']);
+
+        self::assertSame('custom-handle', $asset->handle);
+    }
+
+    public function testAssetHasExpectedHandlePrefixWhenPrefixChangedViaFilter(): void
+    {
         \WP_Mock::onFilter('woda-scripts-styles-loader-prefix')
             ->with(self::HANDLE_PREFIX)
             ->reply(self::CUSTOM_HANDLE_PREFIX);
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], 'custom-handle']);
-        self::assertSame('custom-handle', $asset->handle);
         $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js']);
+
         self::assertSame(self::CUSTOM_HANDLE_PREFIX . 'asset', $asset->handle);
     }
 }

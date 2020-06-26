@@ -33,24 +33,28 @@ final class StyleTest extends AbstractTestCase
     public function testEnqueue(): void
     {
         \WP_Mock::expectActionAdded('wp_enqueue_scripts', [$this->style, 'enqueueStyle'], 1);
+
         $this->style->enqueue(1);
     }
 
     public function testEnqueueAdmin(): void
     {
         \WP_Mock::expectActionAdded('admin_enqueue_scripts', [$this->style, 'enqueueStyle'], 1);
+
         $this->style->enqueueAdmin(1);
     }
 
     public function testEnqueueEditor(): void
     {
         \WP_Mock::expectActionAdded('after_setup_theme', [$this->style, 'addEditorStyle'], 1);
+
         $this->style->enqueueEditor(1);
     }
 
     public function testLoadAsync(): void
     {
         \WP_Mock::expectActionAdded('style_loader_tag', [$this->style, 'applyAsyncPatternToTag'], 1, 2);
+
         $this->style->loadAsync(1);
     }
 
@@ -58,6 +62,7 @@ final class StyleTest extends AbstractTestCase
     {
         WpMockHelper::expectCall('add_theme_support', ['editor-styles']);
         WpMockHelper::expectCall('add_editor_style', [self::SRC]);
+
         $this->style->addEditorStyle();
     }
 
@@ -70,6 +75,7 @@ final class StyleTest extends AbstractTestCase
             self::VER,
             self::MEDIA,
         ]);
+
         $this->style->enqueueStyle();
     }
 
@@ -83,10 +89,6 @@ final class StyleTest extends AbstractTestCase
                 '<link rel=\'stylesheet\' id=\'woda-main-css\'  href=\'style.css\' type=\'text/css\' media=\'all\' />',
                 $this->style->handle
             )
-        );
-        self::assertSame(
-            '<style></style>',
-            $this->style->applyAsyncPatternToTag('<style></style>', 'foobar')
         );
     }
 }

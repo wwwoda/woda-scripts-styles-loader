@@ -33,48 +33,56 @@ final class ScriptTest extends AbstractTestCase
     public function testDeregister(): void
     {
         \WP_Mock::expectActionAdded('wp_enqueue_scripts', [$this->script, 'deregisterScript'], 1);
+
         $this->script->deregister(1);
     }
 
     public function testDeregisterAdmin(): void
     {
         \WP_Mock::expectActionAdded('admin_enqueue_scripts', [$this->script, 'deregisterScript'], 1);
+
         $this->script->deregisterAdmin(1);
     }
 
     public function testEnqueue(): void
     {
         \WP_Mock::expectActionAdded('wp_enqueue_scripts', [$this->script, 'enqueueScript'], 1);
+
         $this->script->enqueue(1);
     }
 
     public function testEnqueueAdmin(): void
     {
         \WP_Mock::expectActionAdded('admin_enqueue_scripts', [$this->script, 'enqueueScript'], 1);
+
         $this->script->enqueueAdmin(1);
     }
 
     public function testLoadAsync(): void
     {
         \WP_Mock::expectActionAdded('script_loader_tag', [$this->script, 'addAsyncAttribute'], 1, 2);
+
         $this->script->loadAsync(1);
     }
 
     public function testLoadDeferred(): void
     {
         \WP_Mock::expectActionAdded('script_loader_tag', [$this->script, 'addDeferAttribute'], 1, 2);
+
         $this->script->loadDeferred(1);
     }
 
     public function testRegister(): void
     {
         \WP_Mock::expectActionAdded('wp_enqueue_scripts', [$this->script, 'registerScript'], 1);
+
         $this->script->register(1);
     }
 
     public function testRegisterAdmin(): void
     {
         \WP_Mock::expectActionAdded('admin_enqueue_scripts', [$this->script, 'registerScript'], 1);
+
         $this->script->registerAdmin(1);
     }
 
@@ -87,10 +95,6 @@ final class ScriptTest extends AbstractTestCase
                 $this->script->handle
             )
         );
-        self::assertSame(
-            '<script></script>',
-            $this->script->addAsyncAttribute('<script></script>', 'foobar')
-        );
     }
 
     public function testAddDeferAttribute(): void
@@ -102,15 +106,12 @@ final class ScriptTest extends AbstractTestCase
                 $this->script->handle
             )
         );
-        self::assertSame('<script></script>', $this->script->addDeferAttribute(
-            '<script></script>',
-            'foobar'
-        ));
     }
 
     public function testDeregisterScript(): void
     {
         WpMockHelper::expectCall('wp_deregister_script', [$this->script->handle]);
+
         $this->script->deregisterScript();
     }
 
@@ -123,6 +124,7 @@ final class ScriptTest extends AbstractTestCase
             self::VER,
             self::IN_FOOTER,
         ]);
+
         $this->script->enqueueScript();
     }
 
@@ -135,6 +137,7 @@ final class ScriptTest extends AbstractTestCase
             self::VER,
             self::IN_FOOTER,
         ]);
+
         $this->script->registerScript();
     }
 }

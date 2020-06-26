@@ -44,7 +44,6 @@ abstract class Asset
     public function addHashFile(HashFile $hashFile, ?string $key = null): Asset
     {
         $this->hash = $hashFile->getHashValue($key ?? $this->file->getBaseName());
-        ;
         return $this;
     }
 
@@ -74,7 +73,7 @@ abstract class Asset
             return $handle;
         }
         $defaultPrefix = Config::loadConfigString('handle_prefix');
-        $prefix = apply_filters('woda-scripts-styles-loader-prefix', $defaultPrefix);
+        $prefix = apply_filters(Config::loadConfigString('filter_prefix') . 'handle_prefix', $defaultPrefix);
         return $prefix . $this->file->getFileName();
     }
 }
