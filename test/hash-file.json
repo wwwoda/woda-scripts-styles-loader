@@ -1,0 +1,5 @@
+{
+  "asset.js": "asset-hash",
+  "script.js": "script-hash",
+  "style.css": "style-hash"
+}

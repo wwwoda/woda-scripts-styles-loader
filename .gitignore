@@ -1,55 +1,18 @@
 ### Plugin ###
-assets
-
-# GulpPress Local Config
-gulppress.local.config.ts
-
-### Logs ###
-*.log
-
-### Dotenv ###
-.env
-.env.*
-!.env.example
+/assets/*
+!/assets/src/
+/wordpress/
 
 ### Composer ###
-/vendor
-
-### WP-CLI ###
-wp-cli.local.yml
-
-### Database dumps ###
-db-sync
-*.sql
-
-### Composer ###
-vendor
+/vendor/
+/composer.lock
 
 ### Node ###
-.node/
-node_modules/
-npm-debug.log
-.npmrc
+/node_modules/
+/yarn.lock
 
-### Log files ###
-**/log
-npm-debug.log*
-yarn-error.log*
+### GulpPress Local Config ###
+/gulppress.local.config.ts
 
-### Mac OSX + Windows ###
-.DS_Store
-Thumbs.db
-
-### Vim ###
-*.sw[op]
-*.un~
-
-### Editor directory ###
-.idea
-.vscode
-**/.idea
-**/.vscode
-
-### Archives ###
-*.tar.gz
-*.zip
+## Tests ###
+/infection-log.txt
