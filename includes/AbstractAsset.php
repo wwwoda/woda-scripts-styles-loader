@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace Woda\WordPress\ScriptsStylesLoader;
 
-abstract class Asset
+abstract class AbstractAsset implements AbstractAssetInterface
 {
     /** @var string[] */
     public $deps;
+    /** @var bool */
+    public $enqueueAdmin = false;
+    /** @var bool */
+    public $enqueueFrontend = false;
+    /** @var bool */
+    public $enqueueLogin = false;
     /** @var File */
     public $file;
     /** @var string */
     public $handle;
     /** @var string */
     public $hash;
+    /** @var bool */
+    public $loadAsync;
     /** @var string */
     public $src;
     /** @var string|bool|null */
@@ -41,15 +49,39 @@ abstract class Asset
         $this->ver = $ver;
     }
 
-    public function addHashFile(HashFile $hashFile, ?string $key = null): Asset
+    public function addHashFile(HashFile $hashFile, ?string $key = null): AbstractAssetInterface
     {
         $this->hash = $hashFile->getHashValue($key ?? $this->file->getBaseName());
         return $this;
     }
 
-    public function calculateHashValue(): Asset
+    public function calculateHashValue(): AbstractAssetInterface
     {
         $this->hash = md5($this->src);
+        return $this;
+    }
+
+    public function enqueueAdmin(): AbstractAssetInterface
+    {
+        $this->enqueueAdmin = true;
+        return $this;
+    }
+
+    public function enqueueFrontend(): AbstractAssetInterface
+    {
+        $this->enqueueFrontend = true;
+        return $this;
+    }
+
+    public function enqueueLogin(): AbstractAssetInterface
+    {
+        $this->enqueueLogin = true;
+        return $this;
+    }
+
+    public function loadAsync(): AbstractAssetInterface
+    {
+        $this->loadAsync = true;
         return $this;
     }
 
@@ -65,6 +97,21 @@ abstract class Asset
             return get_bloginfo('version');
         }
         return '';
+    }
+
+    public function shouldEnqueueInAdmin(): bool
+    {
+        return $this->enqueueAdmin;
+    }
+
+    public function shouldEnqueueInFrontend(): bool
+    {
+        return $this->enqueueFrontend;
+    }
+
+    public function shouldEnqueueInLogin(): bool
+    {
+        return $this->enqueueLogin;
     }
 
     private function generateHandle(?string $handle): string

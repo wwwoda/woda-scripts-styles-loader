@@ -21,5 +21,5 @@ final class Config
             throw new RuntimeException(sprintf('Required config key "%s" not found.', $key));
         }
         return $value;
-    }
+    }   
 }

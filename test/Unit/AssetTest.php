@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Woda\Test\WordPress\ScriptsStylesLoader\Unit;
 
 use Woda\Test\WordPress\ScriptsStylesLoader\Unit\Helper\WpMockHelper;
-use Woda\WordPress\ScriptsStylesLoader\Asset;
+use Woda\WordPress\ScriptsStylesLoader\AbstractAsset;
 use Woda\WordPress\ScriptsStylesLoader\Config;
 use Woda\WordPress\ScriptsStylesLoader\HashFile;
 
@@ -15,7 +15,7 @@ final class AssetTest extends AbstractTestCase
     private const HANDLE_PREFIX = 'woda-';
     private const CUSTOM_HANDLE_PREFIX = 'adow-';
 
-    /** @var Asset */
+    /** @var AbstractAsset */
     private $asset;
     /** @var HashFile */
     private $hashFile;
@@ -24,7 +24,7 @@ final class AssetTest extends AbstractTestCase
     {
         parent::setUp();
         Config::$config = ['handle_prefix' => self::HANDLE_PREFIX];
-        $this->asset = $this->getMockForAbstractClass(Asset::class, ['asset.js']);
+        $this->asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js']);
         $this->hashFile = new HashFile(__DIR__ . '/../hash-file.json');
     }
 
@@ -44,7 +44,7 @@ final class AssetTest extends AbstractTestCase
 
     public function testGetVersionReturnsEmptyStringWhenPassedNull(): void
     {
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE, null]);
+        $asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js', [], self::HANDLE, null]);
 
         self::assertSame('', $asset->getVersion());
 
@@ -52,14 +52,14 @@ final class AssetTest extends AbstractTestCase
 
     public function testGetVersionReturnsArgumentWhenPassedString(): void
     {
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE, 'ver']);
+        $asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js', [], self::HANDLE, 'ver']);
 
         self::assertSame('ver', $asset->getVersion());
     }
 
     public function testGetVersionReturnsHashValueWhenPassedHashFile(): void
     {
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], self::HANDLE]);
+        $asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js', [], self::HANDLE]);
         $asset->addHashFile($this->hashFile);
 
         self::assertSame('asset-hash', $asset->getVersion());
@@ -72,7 +72,7 @@ final class AssetTest extends AbstractTestCase
 
     public function testAssetHasExpectedHandleWhenCustomHandlePassed(): void
     {
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js', [], 'custom-handle']);
+        $asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js', [], 'custom-handle']);
 
         self::assertSame('custom-handle', $asset->handle);
     }
@@ -82,7 +82,7 @@ final class AssetTest extends AbstractTestCase
         \WP_Mock::onFilter('woda-scripts-styles-loader-prefix')
             ->with(self::HANDLE_PREFIX)
             ->reply(self::CUSTOM_HANDLE_PREFIX);
-        $asset = $this->getMockForAbstractClass(Asset::class, ['asset.js']);
+        $asset = $this->getMockForAbstractClass(AbstractAsset::class, ['asset.js']);
 
         self::assertSame(self::CUSTOM_HANDLE_PREFIX . 'asset', $asset->handle);
     }
